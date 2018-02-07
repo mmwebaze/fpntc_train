@@ -1,0 +1,5 @@
+name: fpntc train module
+type: module
+description: FPNTC Module for integrating with train.org
+core: 8.x
+package: fpntc

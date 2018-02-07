@@ -1,0 +1,15 @@
+fpntc_train.settings:
+  path: '/admin/fpntc_train/settings'
+  defaults:
+    _form: '\Drupal\fpntc_train\Form\FpntcTrainSettingsForm'
+    _title: 'FPNTC TRAIN Settings'
+  requirements:
+    _permission: 'administer site configuration'
+
+fpntc_train.demo:
+  path: '/demo'
+  defaults:
+    _controller: '\Drupal\fpntc_train\Controller\FpntcTrainController::demo'
+    _title: 'Demo'
+  requirements:
+    _permission: 'access content'

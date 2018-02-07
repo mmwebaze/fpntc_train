@@ -1,0 +1,22 @@
+services:
+  fpntc_train.login:
+    class: Drupal\fpntc_train\Service\FpntcTrainLoginService
+    arguments: ['@config.factory']
+
+  fpntc_train.cookie:
+    class: Drupal\fpntc_train\Service\FpntcTrainCookieService
+    arguments: []
+
+  fpntc_train.service:
+    class: Drupal\fpntc_train\Service\FpntcTrainService
+    arguments: ['@fpntc_train.login', '@fpntc_train.cookie', '@config.factory']
+
+  fpntc_train.update_manager:
+    class: Drupal\fpntc_train\Service\FpntcUpdateService
+    arguments: ['@entity_type.manager']
+
+  fpntc_train.event_subscriber:
+    class: Drupal\fpntc_train\EventSubscriber\FpntcTrainEventSubscriber
+    arguments: ['@request_stack', '@fpntc_train.update_manager']
+    tags:
+      - { name: event_subscriber }
