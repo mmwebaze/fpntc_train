@@ -17,7 +17,6 @@ class FpntcUpdateService implements FpntcUpdateServiceInterface {
     foreach ($users as $user){
       $trId = $user->get('field_train_id')->getValue();
       if (!$trId[0]['value'] == $trainId){
-        print_r('update now');
         $user->set('field_train_id', $trainId);
         $user->save();
       }

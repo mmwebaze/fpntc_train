@@ -19,12 +19,13 @@ class FpntcTrainController extends ControllerBase
             $container->get('fpntc_train.service')
         );
     }
-    public function demo(){
-        /*$this->fpntcTrainService->updateUserRegistration(****, 1069764, 0,
-            0, '02/07/2018');*/
+    public function update($userId, $courseId, $date){
+      print($userId.'-'. $courseId.'-'. $date);die();
+        $status = $this->fpntcTrainService->updateUserRegistration($userId, $courseId, 0,
+            0, $date);
         return array(
             '#theme' => 'fpntc_train',
-            '#markup' => t('Testing update of train'),
+            '#markup' => $status,
         );
     }
 }
