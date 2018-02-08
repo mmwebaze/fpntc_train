@@ -1,8 +1,10 @@
 <?php
 namespace Drupal\fpntc_train\EventSubscriber;
 
+use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\fpntc_train\Service\FpntcUpdateServiceInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -21,10 +23,17 @@ class FpntcTrainEventSubscriber implements EventSubscriberInterface {
    * @var Drupal\fpntc_train\Service\FpntcUpdateService
    */
   protected $fpntcUpdateService;
+  /**
+   * The route match object for the current page.
+   *
+   * @var \Drupal\Core\Routing\RouteMatchInterface
+   */
+  protected $routeMatch;
 
-  public function __construct(RequestStack $request_stack, FpntcUpdateServiceInterface $fpntcUpdateService){
+  public function __construct(RequestStack $request_stack, FpntcUpdateServiceInterface $fpntcUpdateService, RouteMatchInterface $route_match){
     $this->requestStack = $request_stack;
     $this->fpntcUpdateService = $fpntcUpdateService;
+    $this->routeMatch = $route_match;
   }
 
   /**
@@ -32,10 +41,15 @@ class FpntcTrainEventSubscriber implements EventSubscriberInterface {
    */
   public static function getSubscribedEvents()
   {
-    $events[KernelEvents::REQUEST][] = ['resource'];
+    $events[KernelEvents::RESPONSE][] = ['resource'];
     return $events;
   }
-  public function resource(GetResponseEvent $event){
+  public function resource(FilterResponseEvent $event){
+    $route_name = $this->routeMatch->getRouteName();
+    if (explode('/', $route_name)[0] == 'system.404'){
+      return;
+    }
+
     $request = $this->requestStack->getCurrentRequest();
     $basePath = $request->getPathInfo();
 
@@ -43,11 +57,6 @@ class FpntcTrainEventSubscriber implements EventSubscriberInterface {
       $email = $request->query->get('email');
       $trainUserId = $request->query->get('UserID');
       $this->fpntcUpdateService->updateUser($trainUserId, $email);
-
-      //$requestUrl = $request->server->get('REQUEST_URI');
-      //print_r($requestUrl);die();
     }
-
-
   }
 }

@@ -17,6 +17,6 @@ services:
 
   fpntc_train.event_subscriber:
     class: Drupal\fpntc_train\EventSubscriber\FpntcTrainEventSubscriber
-    arguments: ['@request_stack', '@fpntc_train.update_manager']
+    arguments: ['@request_stack', '@fpntc_train.update_manager', '@current_route_match']
     tags:
       - { name: event_subscriber }

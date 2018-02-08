@@ -11,12 +11,16 @@ class FpntcUpdateService implements FpntcUpdateServiceInterface {
   }
 
   public function updateUser($trainId, $email){
-
     $storage = $this->entityTypeManager->getStorage('user');
     $ids = $storage->getQuery()->condition('mail', $email)->execute();
     $users = $storage->loadMultiple($ids);
     foreach ($users as $user){
-      print($user->id());
+      $trId = $user->get('field_train_id')->getValue();
+      if (!$trId[0]['value'] == $trainId){
+        print_r('update now');
+        $user->set('field_train_id', $trainId);
+        $user->save();
+      }
     }
   }
 }
