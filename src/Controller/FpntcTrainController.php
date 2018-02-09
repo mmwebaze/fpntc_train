@@ -20,7 +20,6 @@ class FpntcTrainController extends ControllerBase
         );
     }
     public function update($userId, $courseId, $date){
-      print($userId.'-'. $courseId.'-'. $date);die();
         $status = $this->fpntcTrainService->updateUserRegistration($userId, $courseId, 0,
             0, $date);
         return array(
